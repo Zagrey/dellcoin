@@ -1,0 +1,77 @@
+<html ng-app="dellCoinClient">
+<head>
+    <title>DellCoin Client</title>
+
+    <!--Подключение необходимых файлов-->
+
+    <script src="libs/js/angular.js"></script>
+    <link href="libs/styles/bootstrap.min.css" rel="stylesheet"/>
+
+    <script src="libs/js/client.js"></script>
+
+    <style>
+
+        /*form {*/
+        /**/
+        /*width: 800px;*/
+        /*margin: 100px auto;*/
+        /*border: 1px solid grey;*/
+        /*padding: 20px;*/
+        /**/
+        /*}*/
+
+    </style>
+
+</head>
+<body ng-controller="defaultCtrl">
+
+
+<form ng-init="init()">
+    <div class="well">
+
+        <div class="form-group">
+
+
+            <div class="panel panel-primary">
+
+                <div class="panel panel-heading">Files</div>
+
+                <div class="panel panel-body">
+
+                    <table class="table table-striped" ng-show="files.length > 0">
+                        <thead>
+                        <tr>
+                            <th>Content</th>
+                            <th>Hash</th>
+                        </tr>
+                        </thead>
+
+
+                        <tbody>
+                        <tr ng-repeat="file in files">
+                            <td>{{file.content}}</td>
+                            <td>{{file.hash}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <label for="fileContent">File Content:</label>
+                    <textarea class="form-control" rows="5" ng-model="fileContent" id="fileContent"></textarea>
+
+
+                    <button type="button" class="btn btn-primary" ng-click="addFile()"
+                            ng-disabled="fileContent.length <= 0">Add File
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+</body>
+</html>
