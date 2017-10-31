@@ -15,6 +15,8 @@ angular.module("dellCoinClient", [])
         //     $scope.files.push(item);
         // });
 
+        $log.info("Add file: " + file);
+
         $http({
             method: 'POST',
             url: baseUrl + "file",
@@ -22,10 +24,49 @@ angular.module("dellCoinClient", [])
         }).then(function successCallback(response) {
             $scope.files.push(response.data);
             $scope.fileContent = "";
+            $log.info("File added: " + response.data);
         }, function errorCallback(response) {
             $log.error(response);
         });
     };
+
+    $scope.deleteFile = function (file) {
+
+        $log.info("Delete file: " + file);
+
+        $http({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json',
+            method: 'DELETE',
+            url: baseUrl + "files/" + file.id,
+            data: file
+        }).then(function successCallback(response) {
+            $scope.files.splice($scope.files.indexOf(file), 1);
+            $log.info("File deleted.");
+        }, function errorCallback(response) {
+            $log.error(response);
+        });
+    };
+
+    $scope.uploadFile = function (file) {
+
+        $log.info("Upload file: " + file);
+        $log.info("Create slices for file audit...");
+        $http({
+            method: 'POST',
+            url: baseUrl + "slice",
+            data: file
+        }).then(function successCallback(response) {
+            $scope.files.push(response.data);
+            $scope.fileContent = "";
+            $log.info("File slices created " + response.data);
+        }, function errorCallback(response) {
+            $log.error(response);
+        });
+    }
 
     $scope.init = function () {
         $http({

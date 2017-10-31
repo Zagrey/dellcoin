@@ -11,9 +11,9 @@ public interface FileService {
 
     File findOne(Long id);
 
-    File create(File greeting);
+    File create(File f);
 
-    File update(File greeting);
+    File update(File f);
 
     void delete(Long id);
 

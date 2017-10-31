@@ -43,6 +43,8 @@
                         <tr>
                             <th>Content</th>
                             <th>Hash</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
 
@@ -51,6 +53,13 @@
                         <tr ng-repeat="file in files">
                             <td>{{file.content}}</td>
                             <td>{{file.hash}}</td>
+
+                            <td>
+                                <button type="button" class="btn btn-primary btn-xs" ng-click="uploadFile(file)">Upload</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-xs" ng-click="deleteFile(file)">Delete</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
