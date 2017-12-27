@@ -2,7 +2,6 @@ package com.emc.dellcoin.controllers;
 
 import com.emc.dellcoin.model.Peer;
 import com.emc.dellcoin.service.PeerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class PeerController {
@@ -26,11 +26,9 @@ public class PeerController {
     public ResponseEntity<Collection<Peer>> getAll() {
 
         log.info("getPeers: start");
-        Collection<Peer> greetings = peerService.findAll();
-
-
+        List<Peer> peers = peerService.findAll();
         log.info("getPeers: end");
-        return new ResponseEntity<>(greetings, HttpStatus.OK);
+        return new ResponseEntity<>(peers, HttpStatus.OK);
     }
 
     @RequestMapping(

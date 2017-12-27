@@ -1,7 +1,7 @@
 package com.emc.dellcoin.service;
 
 import com.emc.dellcoin.model.ClientFileSlice;
-import com.emc.dellcoin.model.File;
+import com.emc.dellcoin.model.ClientFile;
 import com.emc.dellcoin.repository.ClientFileSliceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,8 @@ public class ClientFileSliceServiceImpl implements ClientFileSliceService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public List<ClientFileSlice> create(File file) {
-        if (file.getId() == null || file.getId() == 0) {
+    public List<ClientFileSlice> create(ClientFile clientFile) {
+        if (clientFile.getId() == 0) {
             return null;
         }
 
@@ -47,14 +47,14 @@ public class ClientFileSliceServiceImpl implements ClientFileSliceService {
 
         List<ClientFileSlice> clientFileSliceList = new ArrayList<>();
 
-        int fileSize = file.getContent().length();
+        int fileSize = clientFile.getContent().length();
 
         if (digest != null) {
-            file.setHash(bytesToHex(digest.digest(file.getContent().getBytes(StandardCharsets.UTF_8))));
+            clientFile.setHash(bytesToHex(digest.digest(clientFile.getContent().getBytes(StandardCharsets.UTF_8))));
 
-            clientFileSliceList.add(new ClientFileSlice(null, file.getId(), 0, fileSize/2, bytesToHex(digest.digest(file.getContent().substring(0, fileSize/2).getBytes(StandardCharsets.UTF_8)))));
-            clientFileSliceList.add(new ClientFileSlice(null, file.getId(), fileSize/2, fileSize - 1, bytesToHex(digest.digest(file.getContent().substring(fileSize/2, fileSize - 1).getBytes(StandardCharsets.UTF_8)))));
-            clientFileSliceList.add(new ClientFileSlice(null, file.getId(), 1, fileSize - 2, bytesToHex(digest.digest(file.getContent().substring(1, fileSize - 2).getBytes(StandardCharsets.UTF_8)))));
+            clientFileSliceList.add(new ClientFileSlice(0, clientFile.getId(), 0, fileSize/2, bytesToHex(digest.digest(clientFile.getContent().substring(0, fileSize/2).getBytes(StandardCharsets.UTF_8)))));
+            clientFileSliceList.add(new ClientFileSlice(0, clientFile.getId(), fileSize/2, fileSize - 1, bytesToHex(digest.digest(clientFile.getContent().substring(fileSize/2, fileSize - 1).getBytes(StandardCharsets.UTF_8)))));
+            clientFileSliceList.add(new ClientFileSlice(0, clientFile.getId(), 1, fileSize - 2, bytesToHex(digest.digest(clientFile.getContent().substring(1, fileSize - 2).getBytes(StandardCharsets.UTF_8)))));
 
             clientFileSliceRepository.save(clientFileSliceList);
         }
