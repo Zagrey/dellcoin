@@ -54,7 +54,7 @@ public class ClientFileServiceImpl implements ClientFileService {
 
         MessageDigest digest = null;
         try {
-            digest = MessageDigest.getInstance("SHA-256");
+            digest = MessageDigest.getInstance("SHA-128");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

@@ -10,6 +10,7 @@ angular.module("dellCoinClient", [])
     $scope.clientFilesSlices = [];
     $scope.fileContent = "";
     $scope.peers = [];
+    $scope.web = null;
 
     $scope.addFile = function () {
 
@@ -90,7 +91,7 @@ angular.module("dellCoinClient", [])
                         $log.info("Slice hash OK");
                     } else {
                         $log.info("Slice hash WRONG: " + response.data.start  + " - " + response.data.end);
-                        // alert("Wrong hash:" + response.data.hash)
+                        alert("Slice hash WRONG: " + response.data.hash)
                     }
 
                 }, function errorCallback(response) {
@@ -136,7 +137,7 @@ angular.module("dellCoinClient", [])
         }).then(function successCallback(response) {
             $scope.clientFile2Peer.push(response.data);
 
-            $log.info("clientFiles2Peer added: " + response.data);
+            $log.info("clientFiles2Peer added: " + response.data.id);
         }, function errorCallback(response) {
             $log.error(response);
         });
@@ -220,6 +221,7 @@ angular.module("dellCoinClient", [])
                 }
             }, function errorCallback(response) {
                 $log.error(response);
+                alert("Download failed (file not found): " + file.hash)
             });
         }
     };
@@ -275,6 +277,19 @@ angular.module("dellCoinClient", [])
         $scope.getPeers();
         $scope.getClientFiles2Peers();
         $scope.getClientFilesSlices();
+        $scope.web3Init();
+    };
+
+    $scope.web3Init = function () {
+        $scope.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        // var coinbase = $scope.web3.eth.coinbase;
+        // var balance = $scope.web3.eth.getBalance(coinbase);
+        // console.log($scope.web3);
+
+        if(!$scope.web3.isConnected)
+            console.log("Ethereum local network not connected.");
+        else
+            console.log("Ethereum local network connected.");
     };
 
     $scope.getClientFiles2Peers = function () {
