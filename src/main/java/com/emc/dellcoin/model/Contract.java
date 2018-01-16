@@ -20,12 +20,11 @@ public class Contract {
     long clientCheckCount; // how many chars (indexes) in file need to check.
     long clientOrigSum;    // client sum by indexes.
     long serverSeed;       // server seed - key for client
-    long serverSum;        // server sum by indexes
     long size;             // file size
     String status;         // just for demonstration
 
     @Transient
-    public boolean isValid() {
+    public boolean isValid(long serverSum) { //server sum by indexes
 
         Random serverRandom = new Random(serverSeed);
         Random clientRandom = new Random(clientSeed);

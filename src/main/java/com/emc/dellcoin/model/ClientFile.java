@@ -18,6 +18,17 @@ public class ClientFile {
     @Column(length = 4096)
     private String content;
     private String hash;
+
+
+    long clientSeed;       // seed for indexes calculation
+    long clientCheckCount; // how many chars (indexes) in file need to check.
+    long clientOrigSum;    // client sum by indexes.
+    long size;             // file size
+    @Transient
+    long serverSeed;       // server seed - key for client
+//    @Transient
+//    long serverSum;        // server sum by indexes
+
 //    private List<ClientFileSlice> clientFileSliceById;
 
 //    @OneToMany(mappedBy = "clientFileByFileid")

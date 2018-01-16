@@ -75,6 +75,10 @@ public class ClientFileServiceImpl implements ClientFileService {
         }
 
         clientFileToUpdate.setContent(clientFile.getContent());
+        clientFileToUpdate.setClientCheckCount(clientFile.getClientCheckCount());
+        clientFileToUpdate.setClientSeed(clientFile.getClientSeed());
+        clientFileToUpdate.setClientOrigSum(clientFile.getClientOrigSum());
+        clientFileToUpdate.setSize(clientFile.getSize());
 
         return clientFileRepository.save(clientFileToUpdate);
     }

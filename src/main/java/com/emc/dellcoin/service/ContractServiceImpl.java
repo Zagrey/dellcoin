@@ -56,7 +56,6 @@ public class ContractServiceImpl implements ContractService {
         }
 
         contractToUpdate.setServerSeed(f.getServerSeed());
-        contractToUpdate.setServerSum(f.getServerSum());
 
         return contractRepository.save(contractToUpdate);
     }

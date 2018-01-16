@@ -68,7 +68,7 @@ public class ClientFileController {
         // insert into contract
         if (savedClientFile != null) {
             Random rTmp = new Random();
-            long clientSeed = rTmp.nextLong();
+            long clientSeed = rTmp.nextInt();
             long clientOrigSum = 0;
             int clientCheckCount = savedClientFile.getContent().length() / 2; // we check 1/2 bytes in orig file
 
@@ -92,6 +92,13 @@ public class ClientFileController {
             c.setClientCheckCount(clientCheckCount);
             c.setSize(savedClientFile.getContent().length());
             contractService.create(c);
+
+            savedClientFile.setClientOrigSum(c.getClientOrigSum());
+            savedClientFile.setClientSeed(c.getClientSeed());
+            savedClientFile.setClientCheckCount(c.getClientCheckCount());
+            savedClientFile.setSize(c.getSize());
+
+            savedClientFile = clientFileService.update(savedClientFile);
         }
 
         log.info("createSlices: before sent");
@@ -115,9 +122,7 @@ public class ClientFileController {
             serverSum += clientFile.getContent().charAt(clientRandom.nextInt(clientFile.getContent().length()));
         }
 
-        contract.setServerSum(serverSum);
-
-        if (contract.isValid()) {
+        if (contract.isValid(serverSum)) {
 
             Random serverRandom = new Random(contract.getServerSeed());
 

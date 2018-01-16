@@ -62,7 +62,7 @@ public class ServerFileController {
         } else {
 
             Random rTmp = new Random();
-            long serverSeed = rTmp.nextLong();
+            long serverSeed = rTmp.nextInt();
             Random r = new Random(serverSeed);
 
             String content = sf.getContent();
@@ -82,6 +82,8 @@ public class ServerFileController {
             c.setHash(hash);
             c.setServerSeed(serverSeed);
             contractService.updateServer(c);
+
+            cf.setServerSeed(serverSeed); // TODO should call from java BE - here
         }
 
         return new ResponseEntity<ClientFile>(cf, HttpStatus.OK);
