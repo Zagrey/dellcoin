@@ -108,37 +108,42 @@ public class ClientFileController {
     }
 
     @RequestMapping(
-            value = "/decode/{hash}",
+            value = "/servsum/{hash}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ClientFile> decodeFile(@PathVariable("hash") String hash) {
+    public ResponseEntity<Integer> servSumFile(@PathVariable("hash") String hash) {
 
-        Contract contract = contractService.findOne(hash);
         ClientFile clientFile = clientFileService.findOneByHash(hash);
 
-        Random clientRandom = new Random(contract.getClientSeed());
-        long serverSum = 0;
-        for (int i = 0; i < contract.getClientCheckCount(); i++) {
+        Random clientRandom = new Random(clientFile.getClientSeed());
+        Integer serverSum = 0;
+        for (int i = 0; i < clientFile.getClientCheckCount(); i++) {
             serverSum += clientFile.getContent().charAt(clientRandom.nextInt(clientFile.getContent().length()));
         }
 
-        if (contract.isValid(serverSum)) {
+        return new ResponseEntity<>(serverSum, HttpStatus.OK);
+    }
 
-            Random serverRandom = new Random(contract.getServerSeed());
 
-            StringBuilder stringBuffer = new StringBuilder();
-            for (int i = 0; i < clientFile.getContent().length(); i++) {
-                stringBuffer.append((char) (clientFile.getContent().charAt(i) - serverRandom.nextInt(1000)));
-            }
+    @RequestMapping(
+            value = "/decode/{hash}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ClientFile> decodeFile(@PathVariable("hash") String hash, @RequestParam("seed") int serverSeed) {
 
-            clientFile.setContent(stringBuffer.toString());
-            clientFileService.update(clientFile);
-            serverFileService.delete(clientFile.getHash());
+        ClientFile clientFile = clientFileService.findOneByHash(hash);
+        Random serverRandom = new Random(serverSeed);
 
-            return new ResponseEntity<>(clientFile, HttpStatus.OK);
+        StringBuilder stringBuffer = new StringBuilder();
+        for (int i = 0; i < clientFile.getContent().length(); i++) {
+            stringBuffer.append((char) (clientFile.getContent().charAt(i) - serverRandom.nextInt(1000)));
         }
 
-        return new ResponseEntity<>(clientFile, HttpStatus.BAD_REQUEST);
+        clientFile.setContent(stringBuffer.toString());
+        clientFileService.update(clientFile);
+        serverFileService.delete(clientFile.getHash());
+
+        return new ResponseEntity<>(clientFile, HttpStatus.OK);
     }
 
     @RequestMapping(

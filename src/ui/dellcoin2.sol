@@ -9,10 +9,10 @@ contract DellCoin {
     mapping (bytes32 => uint256) public clientCheckCountMap;
     mapping (bytes32 => uint256) public clientFileSizeMap;
 
-    mapping (bytes32 => address) public clients;
-    mapping (bytes32 => address) public servers;
+    mapping (bytes32 => address) public clients; // file -> client
+    mapping (bytes32 => address) public servers; // file -> server
 
-    address private owner;
+    address public owner;
     bytes32 private name;
 
     function DellCoin() public {
@@ -55,15 +55,16 @@ contract DellCoin {
 
     // вызывает клиент, если сумма сошлась - зачислить серверу деньги, клиенту отдать ключ
     function checkValid(bytes32 file, int256 serverSum) public view returns (int256) {
-        int256 clientSum = clientOrigSumMap[file];
+//        int256 clientSum = clientOrigSumMap[file];
+        require(serverSum > 0);
 
 //        if (clientOrigSum == serverSum - randSum) {
 //            return true;
 //        }
 
-        int256 randSum = 5;
+//        int256 randSum = 5;
 
-        require(clientSum == serverSum - randSum);
+//        require(clientSum == serverSum - randSum);
 
         return serverSeedMap[file];
     }
