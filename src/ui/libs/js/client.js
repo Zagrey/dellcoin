@@ -11,12 +11,14 @@ angular.module("dellCoinClient", [])
     $scope.fileContent = "";
     $scope.peers = [];
     $scope.web = null;
+    $scope.trx2File = [];
+    $scope.balance = 0;
 
-    $scope.clientAddr = '0x321445C5AB26AcE42Ec198A48643EB21F378CF63';
-    $scope.serverAddr = '0xed63F83E08B0cE64A21a8fF40bCBc7bC34B85f63';
-    $scope.dellAddr = '0xA65eec9FFa960b9C3498b9d63fB69ebDBD7D7584';
-    $scope.contractAddr = '0xB315e1711BB2a14dF4319352c354F6DAc2cB633F';
-    $scope.abi = [ { "constant": true, "inputs": [], "name": "getName", "outputs": [ { "name": "", "type": "bytes32", "value": "0x0000000000000000000000000000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "n", "type": "bytes32" } ], "name": "setName", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "clientOrigSum", "type": "int256" }, { "name": "clientSeed", "type": "int256" }, { "name": "clientCheckCount", "type": "uint256" }, { "name": "fileSize", "type": "uint256" } ], "name": "addClientFile", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientOrigSumMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "servers", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientCheckCountMap", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xa65eec9ffa960b9c3498b9d63fb69ebdbd7d7584" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientSeedMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "serverSeed", "type": "int256" } ], "name": "addServerSeed", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "serverSeedMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clients", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "serverSum", "type": "int256" } ], "name": "checkValid", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientFileSizeMap", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ];
+    $scope.clientAddr = '0xb11fb3C85e325aba3A7a112777e3492D96334EDf';
+    $scope.serverAddr = '0x07f9dcd212553c02a2ED185e089edfa8e6b3010B';
+    $scope.dellAddr = '0xd531508d0b366f42Ad693c7835b6653C7caa55bC';
+    $scope.contractAddr = '0x990ea985ff47CDcF8f53c663342223d7A4d03d8f';
+    $scope.abi = [ { "constant": true, "inputs": [], "name": "getBalance", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getName", "outputs": [ { "name": "", "type": "bytes32", "value": "0x0000000000000000000000000000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "balances", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "File2Server", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "serverKeyMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "n", "type": "bytes32" } ], "name": "setName", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "clientOrigSum", "type": "int256" }, { "name": "clientSeed", "type": "int256" }, { "name": "clientCheckCount", "type": "uint256" }, { "name": "fileSize", "type": "uint256" } ], "name": "addClientFile", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientOrigSumMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "File2Client", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientCheckCountMap", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xd531508d0b366f42ad693c7835b6653c7caa55bc" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientSeedMap", "outputs": [ { "name": "", "type": "int256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "serverKey", "type": "int256" } ], "name": "addServerKey", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "file", "type": "bytes32" }, { "name": "serverSum", "type": "int256" } ], "name": "checkValid", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "clientFileSizeMap", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "file", "type": "bytes32" }, { "indexed": false, "name": "key", "type": "int256" } ], "name": "KeyDisclosure", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "client", "type": "address" }, { "indexed": false, "name": "balance", "type": "uint256" } ], "name": "NewBalance", "type": "event" } ];
 
     $scope.addFile = function () {
 
@@ -188,26 +190,46 @@ angular.module("dellCoinClient", [])
             $log.info("Server sum by file content: " + serverSum);
 
             // контракт проверяет по переданной сумме сервера валидно. если ОК - присылает server seed
-            var serverSeed = $scope.dellCoinContractInstance.checkValid(file.hash.substr(0, 32), serverSum);
-            $log.info("Server seed: " + serverSeed);
+            var trx = $scope.dellCoinContractInstance.checkValid(file.hash.substr(0, 32), serverSum);
+            $scope.trx2File[trx] = file.hash;
+            $log.info("checkValid transaction: " + trx);
+            $log.info("File hash: " + file.hash);
+            $log.info("File hash32: " + file.hash.substr(0, 32));
 
-            if (serverSeed === 0){
-                alert("Contract failed. Server seed: " + serverSeed);
-            } else {
-                $http({
-                    method: 'GET',
-                    url: baseUrl + "decode/" + file.hash + "?seed=" + serverSeed
-                }).then(function successCallback(response) {
+            var event = $scope.dellCoinContractInstance.KeyDisclosure();
+            event.watch(function (error, result) {
+                if (!error) {
+                    $log.info("checkValid transaction: " + result.transactionHash);
 
-                    $log.info("File decoded successfully: " + response.data.content);
-                    $scope.getClientFiles();
-                    $scope.getServerFiles();
+                    if (result.transactionHash in $scope.trx2File) {
+                        var file = $scope.trx2File[result.transactionHash];
+                        delete $scope.trx2File[result.transactionHash];
+                        var serverKey = result.args.key.toString();
+                        $log.info("File: " + file);
+                        $log.info("Server key: " + serverKey);
 
-                }, function errorCallback(response) {
-                    $log.error(response);
-                    alert("Decode failed: " + response.data.content)
-                });
-            }
+                        if (serverKey === 0) {
+                            alert("Contract failed. Server key: " + serverKey);
+                        } else {
+                            $http({
+                                method: 'GET',
+                                url: baseUrl + "decode/" + file + "?seed=" + serverKey
+                            }).then(function successCallback(response) {
+
+                                $log.info("File decoded successfully: " + response.data.content);
+                                $scope.getClientFiles();
+                                $scope.getServerFiles();
+
+                            }, function errorCallback(response) {
+                                $log.error(response);
+                                alert("Decode failed: " + response.data.content)
+                            });
+                        }
+                    }
+
+                }
+            });
+
 
         }, function errorCallback(response) {
             $log.error(response);
@@ -248,7 +270,7 @@ angular.module("dellCoinClient", [])
                     file.content = response.data.content;
                     $scope.updateClientFile(file);
 
-                    var tx = $scope.dellCoinContractInstance.addServerSeed(response.data.hash.substr(0, 32), response.data.serverSeed, {gas:200000, from: $scope.serverAddr});
+                    var tx = $scope.dellCoinContractInstance.addServerKey(response.data.hash.substr(0, 32), response.data.serverSeed, {gas:200000, from: $scope.serverAddr});
                     $log.info("Add server seed into contract: " + response.data.hash.substr(0, 32) + ", seed: " + response.data.serverSeed +  ", tx: " + tx);
 
                 } else {
@@ -326,10 +348,23 @@ angular.module("dellCoinClient", [])
             console.log("defaultAccount: " + $scope.web3.eth.defaultAccount);
             $scope.dellCoinContract = $scope.web3.eth.contract($scope.abi);
             $scope.dellCoinContractInstance = $scope.dellCoinContract.at($scope.contractAddr);
-            $scope.web3.personal.unlockAccount($scope.web3.eth.defaultAccount,'1q2w3e4r',1000000);
-            $scope.web3.personal.unlockAccount($scope.clientAddr,'1q2w3e4r',1000000);
-            $scope.web3.personal.unlockAccount($scope.serverAddr,'1q2w3e4r',1000000);
-            $scope.web3.personal.unlockAccount($scope.dellAddr,'1q2w3e4r',1000000);
+            $scope.web3.personal.unlockAccount($scope.web3.eth.defaultAccount,'12345678',1000000);
+            $scope.web3.personal.unlockAccount($scope.clientAddr,'12345678',1000000);
+            $scope.web3.personal.unlockAccount($scope.serverAddr,'12345678',1000000);
+            $scope.web3.personal.unlockAccount($scope.dellAddr,'12345678',1000000);
+
+            $scope.balance = $scope.web3.fromWei($scope.dellCoinContractInstance.getBalance(), 'ether');
+
+            var event = $scope.dellCoinContractInstance.NewBalance();
+            event.watch(function (error, result) {
+                if (!error) {
+                    $log.info(result);
+                    $log.info("New balance: " + result.args.balance);
+
+                    $scope.balance = $scope.web3.fromWei(result.args.balance, 'ether');
+                }
+            });
+
         } else {
             console.log("Ethereum local network not connected.");
         }

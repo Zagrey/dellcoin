@@ -6,19 +6,30 @@ contract DellCoin {
         int32 seed;
     }
 
-    mapping(bytes32 => int32) public serverSeedMap;
+    mapping(bytes32 => int32) public serverKeyMap;
+    // file -- seed
     mapping(bytes32 => int32) public clientSeedMap;
     mapping(bytes32 => int256) public clientOrigSumMap;
     mapping(bytes32 => int256) public clientCheckCountMap;
     mapping(bytes32 => int256) public clientFileSizeMap;
 
-    mapping(bytes32 => address) public clients; // file -> client
-    mapping(bytes32 => address) public servers; // file -> server
+    mapping(bytes32 => address) public File2Client; // file -> client
+    mapping(bytes32 => address) public File2Server; // file -> server
+
+    mapping (address => uint) public balances;
 
     event test_value(uint256 indexed arg);
 
     address public owner;
     bytes32 private name;
+
+    event KeyDisclosure(bytes32 file, int256 key);
+    event NewBalance(address client, uint balance);
+
+    function () public payable {
+        balances[msg.sender] += msg.value;
+        NewBalance(msg.sender, balances[msg.sender]);
+    }
 
     function DellCoin() public {
         owner = msg.sender;
@@ -32,13 +43,13 @@ contract DellCoin {
         return name;
     }
 
+    function getBalance() public constant returns (uint) {
+        return balances[msg.sender];
+    }
+
     modifier onlyOwner {
         require(msg.sender == owner);
         _;
-    }
-
-    function() public payable {
-        //        buy();
     }
 
     // клиент выложил файл в контракт
@@ -48,30 +59,29 @@ contract DellCoin {
         clientCheckCountMap[file] = clientCheckCount;
         clientFileSizeMap[file] = fileSize;
 
-        clients[file] = msg.sender;
+        File2Client[file] = msg.sender;
     }
 
     // сервер для файла клиента выложил ключ
-    function addServerSeed(bytes32 file, int32 serverSeed) public {
-        serverSeedMap[file] = serverSeed;
-
-        servers[file] = msg.sender;
+    function addServerKey(bytes32 file, int256 serverKey) public {
+        serverKeyMap[file] = serverKey;
+        File2Server[file] = msg.sender;
     }
 
     // вызывает клиент, если сумма сошлась - зачислить серверу деньги, клиенту отдать ключ
-    function checkValid(bytes32 file, int256 serverSum) public view returns (int32) {
+    function checkValid(bytes32 file, int256 serverSum) public returns (bool) {
         //        int256 clientSum = clientOrigSumMap[file];
         require(serverSum > 0);
 
-        var serverRandom = Random(generateSeed(serverSeedMap[file]));
+var serverRandom = Random(generateSeed(serverSeedMap[file]));
 
-        int32[] memory serverRandomSequence = new int32[](uint256(clientFileSizeMap[file]));
+int32[] memory serverRandomSequence = new int32[](uint256(clientFileSizeMap[file]));
         for (uint32 i = 0; i < clientFileSizeMap[file]; i++) {
             var sr = nextInt(serverRandom, 1000);
             serverRandomSequence[i] = sr;
         }
 
-        int64 randSum = 0;
+int64 randSum= 0;
         var clientRandom = Random(generateSeed(clientSeedMap[file]));
         for (i = 0; i < clientCheckCountMap[file]; i++) {
             var cr = nextInt(clientRandom, int32(clientFileSizeMap[file]));
@@ -79,9 +89,22 @@ contract DellCoin {
         }
 
         if (clientOrigSumMap[file] == (serverSum - randSum)) {
-            return serverSeedMap[file];
+            if (serverKeyMap[file]!=0) {
+                int256 key = serverKeyMap[file];
+                uint amount = 10 ether;
+                uint ownerFee = 1 ether;
+                address client = File2Client[file];
+                address server = File2Server[file];
+                balances[client] -= amount + ownerFee;
+                NewBalance(client, balances[client]);
+                server.transfer(amount);
+                owner.transfer(ownerFee);
+                KeyDisclosure(file, key);
+                return true;
+            }
         }
-        return - 1;
+
+        return false;
     }
 
     function kill() public onlyOwner {
