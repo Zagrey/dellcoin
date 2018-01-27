@@ -1,5 +1,6 @@
 package com.emc.dellcoin.controllers;
 
+import com.emc.dellcoin.common.SimpleRandom;
 import com.emc.dellcoin.model.ClientFile;
 import com.emc.dellcoin.model.Contract;
 import com.emc.dellcoin.model.ServerFile;
@@ -62,8 +63,8 @@ public class ServerFileController {
         } else {
 
             Random rTmp = new Random();
-            long serverSeed = rTmp.nextInt();
-            Random r = new Random(serverSeed);
+            int serverSeed = rTmp.nextInt();
+            SimpleRandom r = new SimpleRandom(serverSeed);
 
             String content = sf.getContent();
             int i = 0;

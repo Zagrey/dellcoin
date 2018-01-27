@@ -1,5 +1,6 @@
 package com.emc.dellcoin.controllers;
 
+import com.emc.dellcoin.common.SimpleRandom;
 import com.emc.dellcoin.model.ClientFile;
 import com.emc.dellcoin.model.Contract;
 import com.emc.dellcoin.service.ClientFileSliceService;
@@ -68,11 +69,11 @@ public class ClientFileController {
         // insert into contract
         if (savedClientFile != null) {
             Random rTmp = new Random();
-            long clientSeed = rTmp.nextInt();
+            int clientSeed = rTmp.nextInt();
             long clientOrigSum = 0;
             int clientCheckCount = savedClientFile.getContent().length() / 2; // we check 1/2 bytes in orig file
 
-            Random r = new Random(clientSeed);
+            SimpleRandom r = new SimpleRandom(clientSeed);
 
 //            List<Integer> idxArray = new ArrayList<>();
 
