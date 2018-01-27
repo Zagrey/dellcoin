@@ -59,13 +59,13 @@ contract DellCoin {
     }
 
     // вызывает клиент, если сумма сошлась - зачислить серверу деньги, клиенту отдать ключ
-    function checkValid(bytes32 file, int256 serverSum) public returns (int32) {
+    function checkValid(bytes32 file, int256 serverSum) public view returns (int32) {
         //        int256 clientSum = clientOrigSumMap[file];
         require(serverSum > 0);
 
         var serverRandom = Random(generateSeed(serverSeedMap[file]));
 
-        int32[] memory serverRandomSequence = new int32[](clientFileSizeMap[file]);
+        int32[] memory serverRandomSequence = new int32[](uint256(clientFileSizeMap[file]));
         for (uint32 i = 0; i < clientFileSizeMap[file]; i++) {
             var sr = nextInt(serverRandom, 1000);
             serverRandomSequence[i] = sr;
@@ -88,7 +88,7 @@ contract DellCoin {
         selfdestruct(owner);
     }
 
-    function generateSeed(int32 seed) public view returns (int32) {
+    function generateSeed(int32 seed) public pure returns (int32) {
         seed = seed % 2147483647;
         if (seed <= 0) {
             seed += 2147483646;
@@ -96,7 +96,7 @@ contract DellCoin {
         return seed;
     }
 
-    function nextInt(Random random, int32 range) public view returns (int32) {
+    function nextInt(Random random, int32 range) public pure returns (int32) {
         random.seed = (random.seed * 16807) % 2147483647;
         return (random.seed - 1) % 2147483646 % range;
     }
